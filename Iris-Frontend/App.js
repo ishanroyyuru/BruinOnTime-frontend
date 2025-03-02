@@ -21,21 +21,21 @@ export default function App() {
         June 13, 2022
       </Text>
 
-      <View style={styles.container}>
-      <TouchableOpacity style={styles.button}>
-        <View style={styles.buttonContent}>
-          <Text style={styles.title}>Gym</Text>
-          <Text style={styles.subtitle}>8:00 AM - 8:00 PM</Text>
-        </View>
-      </TouchableOpacity>
+      <View>
+        <TouchableOpacity style={styles.button}>
+          <View style={styles.buttonContent}>
+            <Text style={styles.facilityTitle}>BFit</Text>
+            <Text style={styles.facilitySubtitle}>8:00 AM - 8:00 PM</Text>
+          </View>
+        </TouchableOpacity>
 
-      <TouchableOpacity style={styles.button}>
-        <View style={styles.buttonContent}>
-          <Text style={styles.title}>Library</Text>
-          <Text style={styles.subtitle}>9:00 AM - 5:00 PM</Text>
-        </View>
-      </TouchableOpacity>
-    </View>
+        <TouchableOpacity style={styles.button}>
+          <View style={styles.buttonContent}>
+            <Text style={styles.facilityTitle}>De Neve</Text>
+            <Text style={styles.facilitySubtitle}>9:00 AM - 5:00 PM</Text>
+          </View>
+        </TouchableOpacity>
+      </View>
 
       <StatusBar style="auto" />
     </View>
@@ -45,12 +45,11 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
     alignItems: 'flex-start', // Align all items to the left
-    justifyContent: 'flex-start',
     paddingTop: 75, // Move the content down to avoid the top bar clipping
     paddingLeft: 20, // Add padding to the left for consistent margins
     paddingRight: 20, // Add padding to the right as well
+    width: 350,
   },
   title: {
     marginBottom: 15, // Adjust margin for spacing below the title
@@ -64,31 +63,30 @@ const styles = StyleSheet.create({
   },
   date: {
     color: "#888888",
-    fontSize: 18,
+    fontSize: 24,
     fontFamily: "General Sans",
     fontWeight: "bold",
     marginBottom: 30, // Add some space before the headers
     textAlign: 'left', // Date is left-justified
   },
   button: {
-    backgroundColor: '#2774AD', // Background color of the button
     padding: 15,
     borderRadius: 10,
-    width: "100%", // Adjust the width to your preference
+    width: 350, // Adjust the width to your preference
     marginVertical: 10, // Add spacing between buttons
-    elevation: 5, // Optional: add shadow for Android
-
+    borderWidth: 5,
+    borderColor: "#FFD100",
   },
   buttonContent: {
     alignItems: 'center',
   },
-  title: {
-    color: '#fff',
+  facilityTitle: {
+    color: "#2774AD",
     fontSize: 22,
     fontWeight: 'bold',
   },
-  subtitle: {
-    color: '#fff',
+  facilitySubtitle: {
+    color: "#2774AD",
     fontSize: 14,
     marginTop: 5, // Space between title and subtitle
   },
