@@ -2,6 +2,7 @@ import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import { useFonts } from "expo-font";
 import { useState } from 'react';
+import { useEffect } from 'react';
 
 export default function App() {
   const [fontsLoaded] = useFonts({
@@ -9,6 +10,26 @@ export default function App() {
   });
 
   const [selectedCategory, setSelectedCategory] = useState("gym");
+  const [bruinFitHours, setBruinFitHours] = useState("");
+
+  // Fetch the data from the backend API
+  // const fetchBruinFit = async () => {
+  //   try {
+  //     const response = await fetch('http://localhost:5000/api/facility/bruin-fit');
+  //     const data = await response.json();
+  //     setBruinFitHours(data); // Store the response in state
+  //     console.log(bruinFitHours);
+  //   } catch (error) {
+  //     // console.error('Error fetching facilities:', error);
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
+
+  // useEffect(() => {
+  //   fetchBruinFit();
+  // }, []);
+
 
   // Hardcoded facility data based on selection
   const facilities = {
