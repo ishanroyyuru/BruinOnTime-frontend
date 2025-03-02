@@ -1,8 +1,7 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import { useFonts } from "expo-font";
-import { useState } from 'react';
-import { useEffect } from 'react';
+import React, { useEffect, useState } from 'react'; // Import useEffect and useState just once
 
 export default function App() {
   const [fontsLoaded] = useFonts({
@@ -13,23 +12,28 @@ export default function App() {
   const [bruinFitHours, setBruinFitHours] = useState("");
 
   // Fetch the data from the backend API
-  // const fetchBruinFit = async () => {
-  //   try {
-  //     const response = await fetch('http://localhost:5000/api/facility/bruin-fit');
-  //     const data = await response.json();
-  //     setBruinFitHours(data); // Store the response in state
-  //     console.log(bruinFitHours);
-  //   } catch (error) {
-  //     // console.error('Error fetching facilities:', error);
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
+  const fetchBruinFit = async () => {
+    try {
+      // Change localhost to the appropriate IP for Android emulators
+      const response = await fetch('http://127.0.0.1:5001/api/facility/bruin-fit');  // For Android
+      // For iOS, use 'localhost:5000' or 'http://127.0.0.1:5001'
 
-  // useEffect(() => {
-  //   fetchBruinFit();
-  // }, []);
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
 
+      const data = await response.json();
+      console.log('Data:', data);  // Log the data to check its structure
+      setBruinFitHours(data.data);  // Assuming the backend sends the data as { data: '...' }
+    } catch (error) {
+      console.error('Error fetching facilities:', error.message || error);
+    }
+  };
+
+  // Calling fetchBruinFit once the component mounts
+  useEffect(() => {
+    fetchBruinFit();
+  }, []);
 
   // Hardcoded facility data based on selection
   const facilities = {
