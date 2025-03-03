@@ -1,7 +1,7 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, ScrollView } from 'react-native';
 import { useFonts } from "expo-font";
-import React, { useEffect, useState } from 'react'; // Import useEffect and useState just once
+import React, { useEffect, useState } from 'react'; 
 
 export default function App() {
   const [fontsLoaded] = useFonts({
@@ -9,308 +9,57 @@ export default function App() {
   });
 
   const [selectedCategory, setSelectedCategory] = useState("gym");
-  const [bruinFitHours, setBruinFitHours] = useState("");
-  const [JWCHours, setJWCHours] = useState("");
-  const [epicuriaHours, setEpicuriaHours] = useState("");
-  const [deNeveHours, setDeNeveHours] = useState("");
-  const [feastHours, setFeastHours] = useState("");
-  const [bPlateHours, setBPlateHours] = useState("");
-  const [bCafeHours, setBCafeHours] = useState("");
-  const [cafe1919Hours, setCafe1919Hours] = useState("");
-  const [rendeHours, setRendeHours] = useState("");
-  const [studyHours, setStudyHours] = useState("");
-  const [dreyHours, setDreyHours] = useState("");
-  const [epicAckermanHours, setEpicAckermanHours] = useState("");
-  const [rieberTrucksHours, setRieberTrucksHours] = useState("");
-  const [sproulTrucksHours, setSproulTrucksHours] = useState("");
+  const [facilityHours, setFacilityHours] = useState({}); // Store all hours in one object
 
-  // Fetch the data from the backend API
-  const fetchBruinFit = async () => {
+  // Facility endpoints
+  const facilityNames = [
+    "bruin-fit", "jwc", "epicuria", "deNeve", "feast", "bPlate", 
+    "bCafe", "cafe1919", "rende", "study", "drey", "epicAckerman", 
+    "rieberTrucks", "sproulTrucks"
+  ];
+
+  // Function to fetch facility hours dynamically
+  const fetchFacilityHours = async () => {
+    const newHours = {};
     try {
-      // Change localhost to the appropriate IP for Android emulators
-      const response = await fetch('http://127.0.0.1:5001/api/facility/bruin-fit');  // For Android
-      // For iOS, use 'localhost:5000' or 'http://127.0.0.1:5001'
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
+      for (const facility of facilityNames) {
+        const response = await fetch(`http://127.0.0.1:5001/api/facility/${facility}`);
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        const data = await response.json();
+        newHours[facility] = data.data; // Store hours in state object
       }
-
-      const data = await response.json();
-      console.log('Data:', data);  // Log the data to check its structure
-      setBruinFitHours(data.data);  // Assuming the backend sends the data as { data: '...' }
+      setFacilityHours(newHours); // Update state after all requests
     } catch (error) {
-      console.error('Error fetching facilities:', error.message || error);
+      console.error("Error fetching facilities:", error.message || error);
     }
   };
 
-  const fetchJWC = async () => {
-    try {
-      // Change localhost to the appropriate IP for Android emulators
-      const response = await fetch('http://127.0.0.1:5001/api/facility/jwc');  // For Android
-      // For iOS, use 'localhost:5000' or 'http://127.0.0.1:5001'
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
-      }
-
-      const data = await response.json();
-      console.log('Data:', data);  // Log the data to check its structure
-      setJWCHours(data.data);  // Assuming the backend sends the data as { data: '...' }
-    } catch (error) {
-      console.error('Error fetching facilities:', error.message || error);
-    }
-  };
-
-  const fetchEpicuria = async () => {
-    try {
-      // Change localhost to the appropriate IP for Android emulators
-      const response = await fetch('http://127.0.0.1:5001/api/facility/epicuria');  // For Android
-      // For iOS, use 'localhost:5000' or 'http://127.0.0.1:5001'
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
-      }
-
-      const data = await response.json();
-      console.log('Data:', data);  // Log the data to check its structure
-      setEpicuriaHours(data.data);  // Assuming the backend sends the data as { data: '...' }
-    } catch (error) {
-      console.error('Error fetching facilities:', error.message || error);
-    }
-  };
-
-  const fetchDeNeve = async () => {
-    try {
-      // Change localhost to the appropriate IP for Android emulators
-      const response = await fetch('http://127.0.0.1:5001/api/facility/deNeve');  // For Android
-      // For iOS, use 'localhost:5000' or 'http://127.0.0.1:5001'
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
-      }
-
-      const data = await response.json();
-      console.log('Data:', data);  // Log the data to check its structure
-      setDeNeveHours(data.data);  // Assuming the backend sends the data as { data: '...' }
-    } catch (error) {
-      console.error('Error fetching facilities:', error.message || error);
-    }
-  };
-
-  const fetchFeast = async () => {
-    try {
-      // Change localhost to the appropriate IP for Android emulators
-      const response = await fetch('http://127.0.0.1:5001/api/facility/feast');  // For Android
-      // For iOS, use 'localhost:5000' or 'http://127.0.0.1:5001'
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
-      }
-
-      const data = await response.json();
-      console.log('Data:', data);  // Log the data to check its structure
-      setFeastHours(data.data);  // Assuming the backend sends the data as { data: '...' }
-    } catch (error) {
-      console.error('Error fetching facilities:', error.message || error);
-    }
-  };
-
-  const fetchBPlate = async () => {
-    try {
-      // Change localhost to the appropriate IP for Android emulators
-      const response = await fetch('http://127.0.0.1:5001/api/facility/bPlate');  // For Android
-      // For iOS, use 'localhost:5000' or 'http://127.0.0.1:5001'
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
-      }
-
-      const data = await response.json();
-      console.log('Data:', data);  // Log the data to check its structure
-      setBPlateHours(data.data);  // Assuming the backend sends the data as { data: '...' }
-    } catch (error) {
-      console.error('Error fetching facilities:', error.message || error);
-    }
-  };
-
-  const fetchBCafe = async () => {
-    try {
-      // Change localhost to the appropriate IP for Android emulators
-      const response = await fetch('http://127.0.0.1:5001/api/facility/bCafe');  // For Android
-      // For iOS, use 'localhost:5000' or 'http://127.0.0.1:5001'
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
-      }
-
-      const data = await response.json();
-      console.log('Data:', data);  // Log the data to check its structure
-      setBCafeHours(data.data);  // Assuming the backend sends the data as { data: '...' }
-    } catch (error) {
-      console.error('Error fetching facilities:', error.message || error);
-    }
-  };
-
-  const fetchCafe1919 = async () => {
-    try {
-      // Change localhost to the appropriate IP for Android emulators
-      const response = await fetch('http://127.0.0.1:5001/api/facility/cafe1919');  // For Android
-      // For iOS, use 'localhost:5000' or 'http://127.0.0.1:5001'
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
-      }
-
-      const data = await response.json();
-      console.log('Data:', data);  // Log the data to check its structure
-      setDeNeveHours(data.data);  // Assuming the backend sends the data as { data: '...' }
-    } catch (error) {
-      console.error('Error fetching facilities:', error.message || error);
-    }
-  };
-
-  const fetchRende = async () => {
-    try {
-      // Change localhost to the appropriate IP for Android emulators
-      const response = await fetch('http://127.0.0.1:5001/api/facility/rende');  // For Android
-      // For iOS, use 'localhost:5000' or 'http://127.0.0.1:5001'
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
-      }
-
-      const data = await response.json();
-      console.log('Data:', data);  // Log the data to check its structure
-      setRendeHours(data.data);  // Assuming the backend sends the data as { data: '...' }
-    } catch (error) {
-      console.error('Error fetching facilities:', error.message || error);
-    }
-  };
-
-  const fetchStudy = async () => {
-    try {
-      // Change localhost to the appropriate IP for Android emulators
-      const response = await fetch('http://127.0.0.1:5001/api/facility/study');  // For Android
-      // For iOS, use 'localhost:5000' or 'http://127.0.0.1:5001'
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
-      }
-
-      const data = await response.json();
-      console.log('Data:', data);  // Log the data to check its structure
-      setStudyHours(data.data);  // Assuming the backend sends the data as { data: '...' }
-    } catch (error) {
-      console.error('Error fetching facilities:', error.message || error);
-    }
-  };
-
-  const fetchDrey = async () => {
-    try {
-      // Change localhost to the appropriate IP for Android emulators
-      const response = await fetch('http://127.0.0.1:5001/api/facility/drey');  // For Android
-      // For iOS, use 'localhost:5000' or 'http://127.0.0.1:5001'
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
-      }
-
-      const data = await response.json();
-      console.log('Data:', data);  // Log the data to check its structure
-      setDreyHours(data.data);  // Assuming the backend sends the data as { data: '...' }
-    } catch (error) {
-      console.error('Error fetching facilities:', error.message || error);
-    }
-  };
-
-  const fetchEpicAckerman = async () => {
-    try {
-      // Change localhost to the appropriate IP for Android emulators
-      const response = await fetch('http://127.0.0.1:5001/api/facility/epicAckerman');  // For Android
-      // For iOS, use 'localhost:5000' or 'http://127.0.0.1:5001'
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
-      }
-
-      const data = await response.json();
-      console.log('Data:', data);  // Log the data to check its structure
-      setEpicAckermanHours(data.data);  // Assuming the backend sends the data as { data: '...' }
-    } catch (error) {
-      console.error('Error fetching facilities:', error.message || error);
-    }
-  };
-
-  const fetchRieberTrucks = async () => {
-    try {
-      // Change localhost to the appropriate IP for Android emulators
-      const response = await fetch('http://127.0.0.1:5001/api/facility/rieberTrucks');  // For Android
-      // For iOS, use 'localhost:5000' or 'http://127.0.0.1:5001'
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
-      }
-
-      const data = await response.json();
-      console.log('Data:', data);  // Log the data to check its structure
-      setRieberTrucksHours(data.data);  // Assuming the backend sends the data as { data: '...' }
-    } catch (error) {
-      console.error('Error fetching facilities:', error.message || error);
-    }
-  };
-
-  const fetchSproulTrucks = async () => {
-    try {
-      // Change localhost to the appropriate IP for Android emulators
-      const response = await fetch('http://127.0.0.1:5001/api/facility/sproulTrucks');  // For Android
-      // For iOS, use 'localhost:5000' or 'http://127.0.0.1:5001'
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
-      }
-
-      const data = await response.json();
-      console.log('Data:', data);  // Log the data to check its structure
-      setSproulTrucksHours(data.data);  // Assuming the backend sends the data as { data: '...' }
-    } catch (error) {
-      console.error('Error fetching facilities:', error.message || error);
-    }
-  };
-
-
-  // Calling fetchBruinFit once the component mounts
+  // Fetch data on component mount
   useEffect(() => {
-    fetchBruinFit();
-    fetchJWC();
-    fetchEpicuria();
-    fetchDeNeve();
-    fetchFeast();
-    fetchBPlate();
-    fetchBCafe();
-    fetchCafe1919();
-    fetchRende();
-    fetchStudy();
-    fetchDrey();
+    fetchFacilityHours();
   }, []);
 
-  // Hardcoded facility data based on selection
+  // Facility data categorized
   const facilities = {
     gym: [
-      { name: "Bruin Fit", hours: bruinFitHours },
-      { name: "John Wooden", hours: JWCHours }
+      { name: "Bruin Fit", key: "bruin-fit" },
+      { name: "John Wooden", key: "jwc" }
     ],
     dining: [
-      { name: "De Neve", hours: deNeveHours },
-      { name: "Feast", hours: feastHours },
-      { name: "Bruin Plate", hours: bPlateHours },
-      { name: "Bruin Cafe", hours: bCafeHours },
-      { name: "Cafe 1919", hours: cafe1919Hours },
-      { name: "Rendezvous", hours: rendeHours },
-      { name: "The Study at Hedrick", hours: studyHours },
-      { name: "The Drey", hours: dreyHours },
-      { name: "Epicuria at Ackerman", hours: epicAckermanHours },
-      { name: "Rieber Food Trucks", hours: rieberTrucksHours },
-      { name: "Sproul Food Trucks", hours: sproulTrucksHours }
+      { name: "Epicuria", key: "epicuria" },
+      { name: "De Neve", key: "deNeve" },
+      { name: "Feast", key: "feast" },
+      { name: "Bruin Plate", key: "bPlate" },
+      { name: "Bruin Cafe", key: "bCafe" },
+      { name: "Cafe 1919", key: "cafe1919" },
+      { name: "Rendezvous", key: "rende" },
+      { name: "The Study at Hedrick", key: "study" },
+      { name: "The Drey", key: "drey" },
+      { name: "Epicuria at Ackerman", key: "epicAckerman" },
+      { name: "Rieber Food Trucks", key: "rieberTrucks" },
+      { name: "Sproul Food Trucks", key: "sproulTrucks" }
     ]
   };
 
@@ -318,116 +67,75 @@ export default function App() {
 
   return (
     <View style={styles.container}>
-      <View style={styles.title}>
-        <Text style={styles.titleText}>BruOn Time</Text>
-      </View>
-
-      <Text style={styles.date}>June 13, 2022</Text>
-
-      {/* Binary Selection: Gym or Dining Hall */}
-      <View style={styles.selectionContainer}>
-        <TouchableOpacity 
-          style={[styles.selectionButton, selectedCategory === "gym" && styles.selectedButton]}
-          onPress={() => setSelectedCategory("gym")}
-        >
-          <Text style={styles.selectionButtonText}>Gym</Text>
+      <Text style={styles.header}>BruinOnTime</Text>
+      <View style={styles.categoryContainer}>
+        <TouchableOpacity onPress={() => setSelectedCategory("gym")}>
+          <Text style={selectedCategory === "gym" ? styles.selected : styles.unselected}>Gym</Text>
         </TouchableOpacity>
-        
-        <TouchableOpacity 
-          style={[styles.selectionButton, selectedCategory === "dining" && styles.selectedButton]}
-          onPress={() => setSelectedCategory("dining")}
-        >
-          <Text style={styles.selectionButtonText}>Dining Hall</Text>
+        <TouchableOpacity onPress={() => setSelectedCategory("dining")}>
+          <Text style={selectedCategory === "dining" ? styles.selected : styles.unselected}>Dining</Text>
         </TouchableOpacity>
       </View>
-
-      {/* Render buttons dynamically based on selection */}
-      <View>
-        {facilities[selectedCategory].map((facility, index) => (
-          <TouchableOpacity key={index} style={styles.button}>
-            <View style={styles.buttonContent}>
-              <Text style={styles.facilityTitle}>{facility.name}</Text>
-              <Text style={styles.facilitySubtitle}>{facility.hours}</Text>
-            </View>
-          </TouchableOpacity>
+      <ScrollView>
+        {facilities[selectedCategory].map((facility) => (
+          <View key={facility.key} style={styles.facilityCard}>
+            <Text style={styles.facilityName}>{facility.name}</Text>
+            <Text style={styles.facilityHours}>{facilityHours[facility.key] || "Loading..."}</Text>
+          </View>
         ))}
-      </View>
-
+      </ScrollView>
       <StatusBar style="auto" />
     </View>
   );
 }
 
+// Styles
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'flex-start',
-    paddingTop: 75,
-    paddingLeft: 20,
-    paddingRight: 20,
-    width: 350,
+    padding: 20,
+    backgroundColor: '#f8f8f8',
   },
-  title: {
-    marginBottom: 15,
-  },
-  titleText: {
-    color: "black",
-    fontSize: 45,
-    fontWeight: "bold",
-    fontFamily: "Platypi",
-    textAlign: 'left',
-  },
-  date: {
-    color: "black",
+  header: {
     fontSize: 24,
-    fontFamily: "General Sans",
     fontWeight: "bold",
-    marginBottom: 30,
-    textAlign: 'left',
-  },
-  selectionContainer: {
-    flexDirection: 'row',
+    textAlign: "center",
     marginBottom: 20,
-    width: 350, // Ensuring it fills the container
+    marginTop: 40,
   },
-  selectionButton: {
-    flex: 1,
-    padding: 10,
-    borderRadius: 5, // Smaller border radius
-    borderWidth: 1,
-    borderColor: "black",
-    backgroundColor: "white",
-    alignItems: 'center',
-    justifyContent: 'center',
+  categoryContainer: {
+    flexDirection: "row",
+    justifyContent: "center",
+    marginBottom: 20,
   },
-  selectedButton: {
-    backgroundColor: "black",
+  selected: {
+    fontSize: 18,
+    fontWeight: "bold",
+    color: "blue",
+    marginHorizontal: 10,
   },
-  selectionButtonText: {
+  unselected: {
+    fontSize: 18,
     color: "gray",
+    marginHorizontal: 10,
+  },
+  facilityCard: {
+    backgroundColor: "white",
+    padding: 15,
+    marginBottom: 10,
+    borderRadius: 8,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 2,
+  },
+  facilityName: {
     fontSize: 18,
     fontWeight: "bold",
   },
-  button: {
-    padding: 12,
-    borderRadius: 5, // Smaller border radius
-    width: 350, // Ensuring it fits the container
-    marginVertical: 8,
-    borderWidth: 1,
-    borderColor: "black",
-    backgroundColor: "white",
-  },
-  buttonContent: {
-    alignItems: 'center',
-  },
-  facilityTitle: {
-    color: "black",
-    fontSize: 20,
-    fontWeight: 'bold',
-  },
-  facilitySubtitle: {
-    color: "black",
-    fontSize: 14,
-    marginTop: 5,
-  },
+  facilityHours: {
+    fontSize: 16,
+    color: "gray",
+  }
 });
