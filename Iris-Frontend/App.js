@@ -9,7 +9,7 @@ export default function App() {
   });
 
   const [selectedCategory, setSelectedCategory] = useState("gym");
-  const [facilityHours, setFacilityHours] = useState({}); // Store all hours in one object
+  const [facilityHours, setFacilityHours] = useState({});
 
   // Facility endpoints
   const facilityNames = [
@@ -28,9 +28,9 @@ export default function App() {
           throw new Error(`HTTP error! Status: ${response.status}`);
         }
         const data = await response.json();
-        newHours[facility] = data.data; // Store hours in state object
+        newHours[facility] = data.data;
       }
-      setFacilityHours(newHours); // Update state after all requests
+      setFacilityHours(newHours); 
     } catch (error) {
       console.error("Error fetching facilities:", error.message || error);
     }
@@ -41,7 +41,6 @@ export default function App() {
     fetchFacilityHours();
   }, []);
 
-  // Facility data categorized
   const facilities = {
     gym: [
       { name: "Bruin Fit", key: "bruin-fit" },
@@ -94,14 +93,15 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
-    backgroundColor: '#f8f8f8',
+    backgroundColor: '#f1f5f9',
   },
   header: {
-    fontSize: 24,
+    fontSize: 30,
     fontWeight: "bold",
     textAlign: "center",
-    marginBottom: 20,
+    marginBottom: 30,
     marginTop: 40,
+    color: '#0c2a66', // UCLA Blue
   },
   categoryContainer: {
     flexDirection: "row",
@@ -109,33 +109,35 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   selected: {
-    fontSize: 18,
+    fontSize: 20,
     fontWeight: "bold",
-    color: "blue",
-    marginHorizontal: 10,
+    color: '#ffb81c', // UCLA Gold
+    marginHorizontal: 15,
   },
   unselected: {
-    fontSize: 18,
-    color: "gray",
-    marginHorizontal: 10,
+    fontSize: 20,
+    color: '#0c2a66', // UCLA Blue
+    marginHorizontal: 15,
   },
   facilityCard: {
-    backgroundColor: "white",
-    padding: 15,
-    marginBottom: 10,
-    borderRadius: 8,
+    backgroundColor: "#ffffff",
+    padding: 20,
+    marginBottom: 15,
+    borderRadius: 12,
     shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
+    shadowOffset: { width: 0, height: 5 },
     shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 2,
+    shadowRadius: 10,
+    elevation: 3,
   },
   facilityName: {
-    fontSize: 18,
+    fontSize: 20,
     fontWeight: "bold",
+    color: '#0c2a66', // UCLA Blue
   },
   facilityHours: {
     fontSize: 16,
-    color: "gray",
+    color: "#555555",
+    marginTop: 5,
   }
 });
