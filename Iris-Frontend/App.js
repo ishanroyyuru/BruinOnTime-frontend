@@ -10,6 +10,7 @@ export default function App() {
 
   const [selectedCategory, setSelectedCategory] = useState("gym");
   const [bruinFitHours, setBruinFitHours] = useState("");
+  const [JWCHours, setJWCHours] = useState("");
 
   // Fetch the data from the backend API
   const fetchBruinFit = async () => {
@@ -30,9 +31,28 @@ export default function App() {
     }
   };
 
+  const fetchJWC = async () => {
+    try {
+      // Change localhost to the appropriate IP for Android emulators
+      const response = await fetch('http://127.0.0.1:5001/api/facility/jwc');  // For Android
+      // For iOS, use 'localhost:5000' or 'http://127.0.0.1:5001'
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+
+      const data = await response.json();
+      console.log('Data:', data);  // Log the data to check its structure
+      setJWCHours(data.data);  // Assuming the backend sends the data as { data: '...' }
+    } catch (error) {
+      console.error('Error fetching facilities:', error.message || error);
+    }
+  };
+
   // Calling fetchBruinFit once the component mounts
   useEffect(() => {
     fetchBruinFit();
+    fetchJWC();
   }, []);
 
   // Hardcoded facility data based on selection
